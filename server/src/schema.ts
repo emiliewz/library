@@ -15,6 +15,12 @@ type Author {
   id: ID!
 }
 
+type User {
+  username: String!
+  favoriteGenre: String!
+  id: ID!
+}
+
 `;
 
 export default typeDefs;
