@@ -56,6 +56,10 @@ const typeDefs = `
       favoriteGenre: String!
     ): User
 
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
 `;
 
