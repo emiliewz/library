@@ -6,7 +6,8 @@
 	},
 	"extends": [
 		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended"
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking"
 	],
 	"overrides": [
 		{
@@ -23,7 +24,8 @@
 	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
-		"ecmaVersion": "latest"
+		"ecmaVersion": "latest",
+		"project": "./tsconfig.json"
 	},
 	"plugins": [
 		"@typescript-eslint"
@@ -31,7 +33,7 @@
 	"rules": {
 		"indent": [
 			"error",
-			"tab"
+			2
 		],
 		"linebreak-style": [
 			"error",
