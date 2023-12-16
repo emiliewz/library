@@ -17,12 +17,16 @@ const typeDefs = `
 
   type User {
     username: String!
+    name: String!
+    password: String!
     favoriteGenre: String!
     id: ID!
   }
 
   type Token {
-    value: String!
+    token: String!
+    username: String!
+    name: String!
   }
 
   type Query {
@@ -47,13 +51,11 @@ const typeDefs = `
 
     createUser(
       username: String!
+      name: String!
+      password: String!
       favoriteGenre: String!
     ): User
 
-    login(
-      username: String!
-      password: String!
-    ): Token
   }
 `;
 
