@@ -35,6 +35,11 @@ const typeDefs = `
       author: String!
       genres: [String!]!
     ) : Book
+
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ) : Author
   }
 `;
 
