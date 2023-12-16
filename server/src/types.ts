@@ -13,3 +13,9 @@ export interface IBook {
   author: Types.ObjectId
   genres: string[]
 }
+
+export interface IUser {
+  username: string
+  name: string
+  favoriteGenre: string
+}
