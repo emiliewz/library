@@ -1,0 +1,1 @@
+This application is a library website, allow user to view all the books in the library, the information of authors, and view books depending on different genres and their own favorite genres. Users who logged in can add new books and authors, update authors info, and view recommend books according to their favorite genres. 
