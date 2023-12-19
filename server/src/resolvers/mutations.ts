@@ -6,7 +6,8 @@ import { HydratedDocument, Types } from 'mongoose';
 import { IBook, IUser } from '../types';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
-import 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import config from '../utils/config';
 
 declare module 'jsonwebtoken' {
   export interface UserForTokenPayload extends JwtPayload {
@@ -101,6 +102,29 @@ const mutations: MutationResolvers = {
         }
       });
     }
+  },
+
+  login: async (_root, { username, password }) => {
+    const user = await User.findOne({ username });
+    const passwordCorrect = user === null
+      ? false
+      : await bcrypt.compare(password, user.passwordHash);
+
+    if (!(user && passwordCorrect)) {
+      throw new GraphQLError('invalid username or password', {
+        extensions: {
+          code: 'BAD_USER_INPUT',
+        }
+      });
+    }
+
+    const userForToken: jwt.UserForTokenPayload = {
+      username: user.username,
+      id: user._id,
+    };
+
+    const token: string = jwt.sign(userForToken, config.SECRET, { expiresIn: 60 * 60 });
+    return { token, username: user.username, name: user.name };
   }
 };
 
