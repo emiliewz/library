@@ -86,6 +86,11 @@ export type QueryAllBooksArgs = {
   genre?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  bookAdded: Book;
+};
+
 export type Token = {
   __typename?: 'Token';
   name: Scalars['String']['output'];
@@ -181,6 +186,7 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Subscription: ResolverTypeWrapper<{}>;
   Token: ResolverTypeWrapper<Token>;
   User: ResolverTypeWrapper<User>;
 }>;
@@ -195,6 +201,7 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
+  Subscription: {};
   Token: Token;
   User: User;
 }>;
@@ -232,6 +239,10 @@ export type QueryResolvers<ContextType = MyContext, ParentType extends Resolvers
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  bookAdded?: SubscriptionResolver<ResolversTypes['Book'], "bookAdded", ParentType, ContextType>;
+}>;
+
 export type TokenResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -252,6 +263,7 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Book?: BookResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;
