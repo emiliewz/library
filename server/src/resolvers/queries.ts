@@ -20,7 +20,8 @@ const queries: QueryResolvers = {
       query = { ...query, genres: genre };
     }
     return Book.find(query).populate('author');
-  }
+  },
+  allAuthors: async () => Author.find({}),
 };
 
 export default queries;
