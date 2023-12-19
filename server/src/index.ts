@@ -1,13 +1,18 @@
 import resolvers from './resolvers';
-import { ApolloServer, BaseContext } from '@apollo/server';
+import { ApolloServer } from '@apollo/server';
 import { readFileSync } from 'fs';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import mongoose from 'mongoose';
 import config from './utils/config';
+import { User } from './__generated__/resolvers-types';
 
 const typeDefs = readFileSync('./src/schema.graphql', { encoding: 'utf-8' });
 
-const server: ApolloServer<BaseContext> = new ApolloServer({
+export interface MyContext {
+  user?: User
+}
+
+const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
