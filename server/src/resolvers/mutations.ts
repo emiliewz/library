@@ -39,6 +39,30 @@ const mutations: MutationResolvers = {
         }
       });
     }
+  },
+
+  editAuthor: async (_root, { name, setBornTo }) => {
+    const author = await Author.findOne({ name });
+    if (author) {
+      try {
+        author.born = setBornTo;
+        return (await author.save()).populate('books');
+      } catch (error) {
+        throw new GraphQLError('Editing bornyear failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: setBornTo,
+            error
+          }
+        });
+      }
+    }
+    throw new GraphQLError('Author does not exist', {
+      extensions: {
+        code: 'BAD_USER_INPUT',
+        invalidArgs: name
+      }
+    });
   }
 };
 
