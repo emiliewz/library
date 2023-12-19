@@ -15,6 +15,11 @@ const userSchema = new Schema<IUser>({
   },
   favoriteGenre: {
     type: String
+  },
+  passwordHash: {
+    type: String,
+    required: true,
+    minlength: 6
   }
 });
 
@@ -22,9 +27,10 @@ userSchema.plugin(uniqueValidator);
 
 userSchema.set('toJSON', {
   transform: (_doc, ret: Record<string, string>) => {
-    ret.id = ret._id;
+    ret.id = ret._id.toString();
     delete ret._id;
     delete ret.__v;
+    delete ret.passwordHash;
   }
 });
 const User = model<IUser>('User', userSchema);
