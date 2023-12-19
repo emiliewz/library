@@ -1,4 +1,4 @@
-import { QueryResolvers } from '../__generated__/resolvers-types';
+import { QueryResolvers, User } from '../__generated__/resolvers-types';
 import Author from '../models/author';
 import Book from '../models/book';
 
@@ -22,6 +22,7 @@ const queries: QueryResolvers = {
     return Book.find(query).populate('author');
   },
   allAuthors: async () => Author.find({}),
+  me: (_root, _args, contextValue) => contextValue.user as User
 };
 
 export default queries;
