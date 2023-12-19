@@ -17,9 +17,17 @@ declare module 'jsonwebtoken' {
 }
 
 const mutations: MutationResolvers = {
-  addBook: async (_root, { title, published, author, genres }) => {
+  addBook: async (_root, { title, published, author, genres }, contextValue) => {
     const book: HydratedDocument<IBook> = new Book({ title, published, genres });
     let authorInDb = await Author.findOne({ name: author });
+
+    if (!contextValue.user) {
+      throw new GraphQLError('not authenticated', {
+        extensions: {
+          code: 'BAD_USER_INPUT',
+        }
+      });
+    }
 
     try {
       if (!authorInDb) {
@@ -52,8 +60,17 @@ const mutations: MutationResolvers = {
     }
   },
 
-  editAuthor: async (_root, { name, setBornTo }) => {
+  editAuthor: async (_root, { name, setBornTo }, contextValue) => {
     const author = await Author.findOne({ name });
+
+    if (!contextValue.user) {
+      throw new GraphQLError('not authenticated', {
+        extensions: {
+          code: 'BAD_USER_INPUT',
+        }
+      });
+    }
+
     if (author) {
       try {
         author.born = setBornTo;
@@ -81,15 +98,15 @@ const mutations: MutationResolvers = {
       throw new GraphQLError('`password` is shorter than the minimum allowed length (6)', {
         extensions: {
           code: 'BAD_USER_INPUT',
-          invalidArgs: username && favoriteGenre,
+          invalidArgs: password,
         }
       });
     }
 
     const saltRounds: number = 10;
     const passwordHash: string = await bcrypt.hash(password, saltRounds);
-
     const user: HydratedDocument<IUser> = new User({ username, favoriteGenre, name, passwordHash });
+
     try {
       await user.save();
       return User.findById(user.id);
@@ -106,6 +123,7 @@ const mutations: MutationResolvers = {
 
   login: async (_root, { username, password }) => {
     const user = await User.findOne({ username });
+
     const passwordCorrect = user === null
       ? false
       : await bcrypt.compare(password, user.passwordHash);
