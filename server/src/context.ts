@@ -34,3 +34,9 @@ export const getUserFromRequest = async (req: IncomingMessage) => {
     });
   }
 };
+
+const context = async ({ req }: { req: IncomingMessage }) => ({
+  user: await getUserFromRequest(req)
+});
+
+export default context;
