@@ -77,6 +77,7 @@ export type Query = {
   allBooks: Array<Book>;
   authorCount: Scalars['Int']['output'];
   bookCount: Scalars['Int']['output'];
+  me?: Maybe<User>;
 };
 
 
@@ -228,6 +229,7 @@ export type QueryResolvers<ContextType = MyContext, ParentType extends Resolvers
   allBooks?: Resolver<Array<ResolversTypes['Book']>, ParentType, ContextType, Partial<QueryAllBooksArgs>>;
   authorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   bookCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 }>;
 
 export type TokenResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
