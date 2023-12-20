@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client';
-import App from './app/App.tsx';
+import App from './app/App';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { getSplitLink } from './utils/index.ts';
+import { getSplitLink } from './utils/index';
 
 const client = new ApolloClient({
   link: getSplitLink(),
