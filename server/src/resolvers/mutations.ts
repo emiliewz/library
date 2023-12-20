@@ -8,6 +8,7 @@ import User from '../models/user';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../utils/config';
+import { pubsub } from './subscriptions';
 
 declare module 'jsonwebtoken' {
   export interface UserForTokenPayload extends JwtPayload {
@@ -48,7 +49,10 @@ const mutations: MutationResolvers = {
 
     try {
       book.author = authorInDb._id;
-      return (await book.save()).populate('author');
+      await book.save();
+
+      await pubsub.publish('BOOK_ADDED', { bookAdded: book.populate('author') });
+      return book.populate('author');
     } catch (error) {
       throw new GraphQLError('Saving book failed', {
         extensions: {
