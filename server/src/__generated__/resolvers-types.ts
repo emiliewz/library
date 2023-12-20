@@ -88,7 +88,7 @@ export type QueryAllBooksArgs = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  bookAdded: Book;
+  bookAdded?: Maybe<Book>;
 };
 
 export type Token = {
@@ -240,7 +240,7 @@ export type QueryResolvers<ContextType = MyContext, ParentType extends Resolvers
 }>;
 
 export type SubscriptionResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
-  bookAdded?: SubscriptionResolver<ResolversTypes['Book'], "bookAdded", ParentType, ContextType>;
+  bookAdded?: SubscriptionResolver<Maybe<ResolversTypes['Book']>, "bookAdded", ParentType, ContextType>;
 }>;
 
 export type TokenResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{

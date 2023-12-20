@@ -62,5 +62,5 @@ type Mutation {
 }
 
 type Subscription {
-  bookAdded: Book!
+  bookAdded: Book
 }
