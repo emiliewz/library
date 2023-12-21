@@ -4,6 +4,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { setContext } from '@apollo/client/link/context';
 import storageService from '../services/storage';
+import { useState } from 'react';
 
 const authLink = setContext((_, { headers }) => {
   const token = storageService.getToken();
@@ -39,4 +40,29 @@ export const getSplitLink = () => {
   );
 
   return splitLink;
+};
+
+type FieldEntry = {
+  field: {
+    type: string,
+    value: string,
+    onChange: ({ target }: React.ChangeEvent<HTMLInputElement>) => void,
+  },
+  setValue: React.Dispatch<React.SetStateAction<string>>
+};
+
+export const useField = (type: string): FieldEntry => {
+  const [value, setValue] = useState<string>('');
+
+  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(target.value);
+  };
+
+  return {
+    field: {
+      type,
+      value,
+      onChange
+    }, setValue
+  };
 };
