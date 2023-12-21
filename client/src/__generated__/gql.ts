@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  mutation EditBirthYear($name: String!, $born: Int!){\n    editAuthor(\n      name: $name\n      setBornTo: $born\n    ) {\n      name\n      id\n      born\n      bookCount\n    }\n  }\n": types.EditBirthYearDocument,
     "\n  query GetAllAuthors {\n    allAuthors {\n      name\n      id\n      born\n      bookCount\n    }\n  }\n": types.GetAllAuthorsDocument,
+    "\n  mutation LoginUser($username: String!, $password: String!) {\n    login(\n      username: $username\n      password: $password\n    ) {\n      username\n      token\n      name\n    }\n  }\n": types.LoginUserDocument,
 };
 
 /**
@@ -39,6 +40,10 @@ export function gql(source: "\n  mutation EditBirthYear($name: String!, $born: I
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetAllAuthors {\n    allAuthors {\n      name\n      id\n      born\n      bookCount\n    }\n  }\n"): (typeof documents)["\n  query GetAllAuthors {\n    allAuthors {\n      name\n      id\n      born\n      bookCount\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation LoginUser($username: String!, $password: String!) {\n    login(\n      username: $username\n      password: $password\n    ) {\n      username\n      token\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation LoginUser($username: String!, $password: String!) {\n    login(\n      username: $username\n      password: $password\n    ) {\n      username\n      token\n      name\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

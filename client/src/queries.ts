@@ -24,3 +24,16 @@ export const GET_ALL_AUTHORS = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const LOGIN_USER = gql(/* GraphQL */ `
+  mutation LoginUser($username: String!, $password: String!) {
+    login(
+      username: $username
+      password: $password
+    ) {
+      username
+      token
+      name
+    }
+  }
+`);
