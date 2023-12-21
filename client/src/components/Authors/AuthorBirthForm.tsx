@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useMutation } from '@apollo/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Author } from '../../app/type';
 import { EDIT_BORN_YEAR } from '../../queries';
@@ -11,13 +10,27 @@ const AuthorBirthForm = ({ authors }: { authors: Author[] }) => {
 
   const [editBirthYear, { data, loading, error }] = useMutation(EDIT_BORN_YEAR);
 
+  useEffect(() => {
+    if (data && data.editAuthor === null) {
+      console.log('Author not found');
+    }
+  }, [data]);
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    born && editBirthYear({ variables: { name, born } });
+  };
+
   if (loading) return 'Submitting...';
-  if (error) return `Submission error! ${error.message}`;
+  if (error) {
+    console.log(error.graphQLErrors.map(e => e.message).join('\n'));
+    return `Submission error! ${error.message}`;
+  }
 
   return (
     <>
       <h2 className='my-3'>Set birthyear</h2>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Select
           aria-label='default select'
           onChange={({ target }) => setName(target.value)}
