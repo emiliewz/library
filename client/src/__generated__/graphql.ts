@@ -105,10 +105,19 @@ export type User = {
   username: Scalars['String']['output'];
 };
 
+export type EditBirthYearMutationVariables = Exact<{
+  name: Scalars['String']['input'];
+  born: Scalars['Int']['input'];
+}>;
+
+
+export type EditBirthYearMutation = { __typename?: 'Mutation', editAuthor?: { __typename?: 'Author', name: string, id: string, born?: number | null, bookCount: number } | null };
+
 export type GetAllAuthorsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllAuthorsQuery = { __typename?: 'Query', allAuthors: Array<{ __typename?: 'Author', name: string, id: string, born?: number | null, bookCount: number }> };
 
 
+export const EditBirthYearDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"EditBirthYear"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"born"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"editAuthor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"Argument","name":{"kind":"Name","value":"setBornTo"},"value":{"kind":"Variable","name":{"kind":"Name","value":"born"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"born"}},{"kind":"Field","name":{"kind":"Name","value":"bookCount"}}]}}]}}]} as unknown as DocumentNode<EditBirthYearMutation, EditBirthYearMutationVariables>;
 export const GetAllAuthorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllAuthors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allAuthors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"born"}},{"kind":"Field","name":{"kind":"Name","value":"bookCount"}}]}}]}}]} as unknown as DocumentNode<GetAllAuthorsQuery, GetAllAuthorsQueryVariables>;
