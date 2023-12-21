@@ -4,3 +4,9 @@ export interface Author {
   born?: number | null
   bookCount: number
 }
+
+export interface User {
+  name: string
+  token: string
+  username: string
+}
