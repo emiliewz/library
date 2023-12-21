@@ -1,24 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { Table } from 'react-bootstrap';
-import { gql } from '../__generated__';
-
-const GET_ALL_AUTHORS = gql(/* GraphQL */ `
-  query GetAllAuthors {
-    allAuthors {
-      name
-      id
-      born
-      bookCount
-    }
-  }
-`);
+import { GET_ALL_AUTHORS } from '../../queries';
 
 const Authors = () => {
   const { loading, data } = useQuery(GET_ALL_AUTHORS);
-
-  if (loading) return null;
+  if (loading) return <p>Loading...</p>;
 
   const authors = data?.allAuthors;
+  if (!authors) return <p>Authors not found</p>;
 
   return (
     <div>
@@ -30,7 +19,7 @@ const Authors = () => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {authors?.map((a) => (
+          {authors.map((a) => (
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
