@@ -1,20 +1,20 @@
 import { useQuery } from '@apollo/client';
 import { Table } from 'react-bootstrap';
 import AuthorBirthForm from './AuthorBirthForm';
-import { GET_ALL_AUTHORS } from '../../queries';
-import { useEffect } from 'react';
+import { GET_ALL_AUTHORS, GET_LOGGEDIN_USER } from '../../queries';
 
 const Authors = () => {
-  const { loading, error, data } = useQuery(GET_ALL_AUTHORS);
+  const { loading, error, data } = useQuery(GET_ALL_AUTHORS, {
+    onError: (error) => {
+      console.log(error.graphQLErrors.map(e => e.message).join('\n'));
+    },
+  });
 
-  useEffect(() => {
-    if (data && data.allAuthors === null) {
-      console.log('Authors not found');
-    }
-  }, [data]);
+  const loggInuser = useQuery(GET_LOGGEDIN_USER);
+  const user = loggInuser.data?.getLoggedInUser;
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Submission error! {error.message}</p>;
+  if (loading || loggInuser.loading) return <p>Loading...</p>;
+  if (error || loggInuser.error) return <p>Submission error! {error?.message} ${loggInuser.error?.message}</p>;
 
   const authors = data?.allAuthors;
 
@@ -37,7 +37,7 @@ const Authors = () => {
           ))}
         </tbody>
       </Table>
-      {authors && <AuthorBirthForm authors={authors} />}
+      {user && authors && <AuthorBirthForm authors={authors} />}
     </div>
   );
 };
