@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Author, NotifyProp } from '../../app/type';
 import { EDIT_BORN_YEAR } from '../../queries';
+import { getErrorMsg } from '../../app/utils';
 
 type PropsType = {
   authors: Author[]
@@ -14,9 +15,7 @@ const AuthorBirthForm = ({ notifyWith, authors }: PropsType) => {
   const [born, setBorn] = useState<number>(2000);
 
   const [editBirthYear, { loading }] = useMutation(EDIT_BORN_YEAR, {
-    onError: (error) => {
-      notifyWith(error.graphQLErrors.map(e => e.message).join('\n'));
-    },
+    onError: (error) => notifyWith(getErrorMsg(error)),
     onCompleted: ({ editAuthor }) => {
       if (editAuthor) {
         notifyWith(`The author ${editAuthor.name}'s birth year has been updated successfully`);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useField } from '../utils';
+import { getErrorMsg, useField } from '../app/utils';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { ADD_BOOK, GET_ALL_AUTHORS, GET_ALL_BOOKS, GET_LOGGEDIN_USER } from '../queries';
@@ -16,10 +16,7 @@ const NewBook = ({ notifyWith }: { notifyWith: NotifyProp }) => {
 
   const [createBook, { loading }] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: GET_ALL_AUTHORS }],
-    onError: (error) => {
-      const messages = error.graphQLErrors.map(e => e.message).join('\n');
-      notifyWith((messages));
-    },
+    onError: (error) => notifyWith(getErrorMsg(error)),
     onCompleted: () => {
       navigate('/books');
     },

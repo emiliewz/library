@@ -1,5 +1,5 @@
 import { Button, Table } from 'react-bootstrap';
-import { useField } from '../utils';
+import { getErrorMsg, useField } from '../app/utils';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_BOOKS } from '../queries';
 import { NotifyProp } from '../app/type';
@@ -9,18 +9,12 @@ const Books = ({ notifyWith }: { notifyWith: NotifyProp }) => {
 
   const result = useQuery(GET_ALL_BOOKS, {
     variables: { genre: null },
-    onError: (error) => {
-      const messages = error.graphQLErrors.map(e => e.message).join('\n');
-      notifyWith((messages));
-    },
+    onError: (error) => notifyWith(getErrorMsg(error)),
   });
   const result_g = useQuery(GET_ALL_BOOKS, {
     variables: { genre: genre.field.value },
     skip: genre.field.value === '',
-    onError: (error) => {
-      const messages = error.graphQLErrors.map(e => e.message).join('\n');
-      notifyWith((messages));
-    },
+    onError: (error) => notifyWith(getErrorMsg(error)),
   });
 
   if (result.loading || result_g.loading) return null;

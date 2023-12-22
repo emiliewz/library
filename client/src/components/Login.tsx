@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { useField } from '../utils';
+import { getErrorMsg, useField } from '../app/utils';
 import { Button, Form } from 'react-bootstrap';
 import { GET_LOGGEDIN_USER, LOGIN_USER } from '../queries';
 import { useNavigate } from 'react-router-dom';
@@ -25,10 +25,7 @@ const Login = ({ notifyWith }: { notifyWith: NotifyProp }) => {
         () => ({ getLoggedInUser: data?.login })
       );
     },
-    onError: (error) => {
-      const messages = error.graphQLErrors.map(e => e.message).join('\n');
-      notifyWith((messages));
-    },
+    onError: (error) => notifyWith(getErrorMsg(error)),
   });
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event: React.FormEvent<HTMLFormElement>): void => {

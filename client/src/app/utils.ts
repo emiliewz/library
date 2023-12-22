@@ -1,5 +1,5 @@
 import { createClient } from 'graphql-ws';
-import { HttpLink, split } from '@apollo/client';
+import { ApolloError, HttpLink, split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { setContext } from '@apollo/client/link/context';
@@ -83,3 +83,5 @@ export const useField = (type: string): FieldEntry => {
     }, setValue
   };
 };
+
+export const getErrorMsg = (error: ApolloError) => error.graphQLErrors.map(e => e.message).join('\n');

@@ -2,22 +2,15 @@ import { useQuery } from '@apollo/client';
 import { GET_ALL_BOOKS, GET_USER } from '../queries';
 import { Table } from 'react-bootstrap';
 import { NotifyProp } from '../app/type';
+import { getErrorMsg } from '../app/utils';
 
 const Recommend = ({ notifyWith }: { notifyWith: NotifyProp }) => {
-  const { data, loading } = useQuery(GET_USER, {
-    onError: (error) => {
-      const messages = error.graphQLErrors.map(e => e.message).join('\n');
-      notifyWith((messages));
-    },
-  });
+  const { data, loading } = useQuery(GET_USER, { onError: (error) => notifyWith(getErrorMsg(error)) });
   const genre = data ? data?.me?.favoriteGenre : null;
 
   const myFavoriteBooks = useQuery(GET_ALL_BOOKS, {
     variables: { genre },
-    onError: (error) => {
-      const messages = error.graphQLErrors.map(e => e.message).join('\n');
-      notifyWith((messages));
-    },
+    onError: (error) => notifyWith(getErrorMsg(error)),
   });
   const books = myFavoriteBooks.data?.allBooks;
 
