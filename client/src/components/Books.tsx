@@ -32,9 +32,7 @@ const Books = ({ notifyWith }: { notifyWith: NotifyProp }) => {
 
   return (
     <div>
-      <h2 className='my-3'>Books</h2>
-
-      {genre && <h4 className='my-3'>in genre <strong>patterns</strong></h4>}
+      <h4 className='my-3'>All Books {genre.field.value !== '' && <>in genre <strong>{genre.field.value}</strong></>}</h4>
 
       {[...new Set(genres_total)].map(g => (
         <Button variant='outline-info' key={g} value={g} onClick={() => genre.setValue(g)}>{g}</Button>

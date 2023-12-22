@@ -35,7 +35,7 @@ const AuthorBirthForm = ({ notifyWith, authors }: PropsType) => {
 
   return (
     <>
-      <h2 className='my-3'>Set birthyear</h2>
+      <h4 className='my-3'>Edit Author's birthyear</h4>
       <Form onSubmit={handleSubmit}>
         <Form.Select
           aria-label='default select'

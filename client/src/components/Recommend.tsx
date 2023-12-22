@@ -26,7 +26,7 @@ const Recommend = ({ notifyWith }: { notifyWith: NotifyProp }) => {
   return (
     <div>
       <h4 className='my-3'>Recommendations</h4>
-      <p>books in your favorite genre <strong>{genre}</strong> patterns</p>
+      <p>books in your favorite genre <strong>{genre}</strong></p>
       <Table className='mt-3' striped>
         <tbody>
           <tr>

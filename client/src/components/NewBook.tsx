@@ -105,7 +105,7 @@ const NewBook = ({ notifyWith }: { notifyWith: NotifyProp }) => {
           genres: {genres.join(' ')}
         </div>
 
-        <Button variant='primary' type='submit'>create book</Button>
+        <Button variant='outline-primary' type='submit'>create book</Button>
       </Form >
     </div>
   );

@@ -24,7 +24,7 @@ const Authors = ({ notifyWith }: { notifyWith: NotifyProp }) => {
 
   return (
     <div>
-      <h2 className='my-3'>Authors</h2>
+      <h4 className='my-3'>Authors</h4>
       <Table striped>
         <tbody>
           <tr>
