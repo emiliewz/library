@@ -31,11 +31,11 @@ export const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 export const getSplitLink = () => {
   const httpLink = new HttpLink({
-    uri: 'http://localhost:4000'
+    uri: '/'
   });
 
   const wsLink = new GraphQLWsLink(createClient({
-    url: 'ws://localhost:4000'
+    url: `${getWebsocketURI()}`
   }));
 
   const splitLink = split(
@@ -51,6 +51,12 @@ export const getSplitLink = () => {
   );
 
   return splitLink;
+};
+
+const getWebsocketURI = () => {
+  const location = window.location;
+  const protocol = location.protocol === 'http:' ? 'ws:' : 'wss:';
+  return protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
 };
 
 type FieldEntry = {
