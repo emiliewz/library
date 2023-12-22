@@ -15,3 +15,5 @@ export interface Info {
   message: string
   type: string
 }
+
+export type NotifyProp = (message: string, type?: string) => void;

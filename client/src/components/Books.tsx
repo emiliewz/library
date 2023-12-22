@@ -2,20 +2,28 @@ import { Button, Table } from 'react-bootstrap';
 import { useField } from '../utils';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_BOOKS } from '../queries';
+import { NotifyProp } from '../app/type';
 
-const Books = () => {
+const Books = ({ notifyWith }: { notifyWith: NotifyProp }) => {
   const genre = useField('text');
 
   const result = useQuery(GET_ALL_BOOKS, {
     variables: { genre: null },
+    onError: (error) => {
+      const messages = error.graphQLErrors.map(e => e.message).join('\n');
+      notifyWith((messages));
+    },
   });
   const result_g = useQuery(GET_ALL_BOOKS, {
     variables: { genre: genre.field.value },
-    skip: genre.field.value === ''
+    skip: genre.field.value === '',
+    onError: (error) => {
+      const messages = error.graphQLErrors.map(e => e.message).join('\n');
+      notifyWith((messages));
+    },
   });
 
-  if (result.loading || result_g.loading) return <p>Loading...</p>;
-  if (result.error || result_g.error) return <p>Submission error! {result.error?.message} {result_g.error?.message}</p>;
+  if (result.loading || result_g.loading) return null;
 
   const allBooks = result.data?.allBooks;
 

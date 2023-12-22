@@ -2,20 +2,24 @@ import { useQuery } from '@apollo/client';
 import { Table } from 'react-bootstrap';
 import AuthorBirthForm from './AuthorBirthForm';
 import { GET_ALL_AUTHORS, GET_LOGGEDIN_USER } from '../../queries';
+import { NotifyProp } from '../../app/type';
 
-const Authors = () => {
-  const { loading, error, data } = useQuery(GET_ALL_AUTHORS, {
+const Authors = ({ notifyWith }: { notifyWith: NotifyProp }) => {
+  const { loading, data } = useQuery(GET_ALL_AUTHORS, {
     onError: (error) => {
-      console.log(error.graphQLErrors.map(e => e.message).join('\n'));
+      notifyWith(error.graphQLErrors.map(e => e.message).join('\n'));
     },
   });
 
-  const loggInuser = useQuery(GET_LOGGEDIN_USER);
+  const loggInuser = useQuery(GET_LOGGEDIN_USER, {
+    onError: (error) => {
+      notifyWith(error.graphQLErrors.map(e => e.message).join('\n'));
+    },
+  });
+
+  if (loading || loggInuser.loading) return null;
+
   const user = loggInuser.data?.getLoggedInUser;
-
-  if (loading || loggInuser.loading) return <p>Loading...</p>;
-  if (error || loggInuser.error) return <p>Submission error! {error?.message} ${loggInuser.error?.message}</p>;
-
   const authors = data?.allAuthors;
 
   return (
@@ -37,7 +41,7 @@ const Authors = () => {
           ))}
         </tbody>
       </Table>
-      {user && authors && <AuthorBirthForm authors={authors} />}
+      {user && authors && <AuthorBirthForm authors={authors} notifyWith={notifyWith} />}
     </div>
   );
 };

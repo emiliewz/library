@@ -4,16 +4,18 @@ import { Button, Form } from 'react-bootstrap';
 import { GET_LOGGEDIN_USER, LOGIN_USER } from '../queries';
 import { useNavigate } from 'react-router-dom';
 import storageService from '../services/storage';
+import { NotifyProp } from '../app/type';
 
-const Login = () => {
+const Login = ({ notifyWith }: { notifyWith: NotifyProp }) => {
   const username = useField('text');
   const password = useField('password');
   const navigate = useNavigate();
 
-  const [loginUser, { loading, error }] = useMutation(LOGIN_USER, {
+  const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     onCompleted: ({ login }) => {
       if (login) {
         storageService.saveUser(login);
+        notifyWith(`${login.name} logged in successfully`);
         navigate('/');
       }
     },
@@ -22,6 +24,10 @@ const Login = () => {
         { query: GET_LOGGEDIN_USER },
         () => ({ getLoggedInUser: data?.login })
       );
+    },
+    onError: (error) => {
+      const messages = error.graphQLErrors.map(e => e.message).join('\n');
+      notifyWith((messages));
     },
   });
 
@@ -33,10 +39,11 @@ const Login = () => {
         password: password.field.value
       }
     });
+    username.setValue('');
+    password.setValue('');
   };
 
   if (loading) return null;
-  if (error) return `Error! ${error}`;
 
   return (
     <div>

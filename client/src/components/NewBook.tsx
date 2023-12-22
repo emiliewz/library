@@ -4,8 +4,9 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { ADD_BOOK, GET_ALL_AUTHORS, GET_ALL_BOOKS, GET_LOGGEDIN_USER } from '../queries';
 import { useNavigate } from 'react-router-dom';
+import { NotifyProp } from '../app/type';
 
-const NewBook = () => {
+const NewBook = ({ notifyWith }: { notifyWith: NotifyProp }) => {
   const title = useField('text');
   const author = useField('text');
   const published = useField('number');
@@ -13,11 +14,11 @@ const NewBook = () => {
   const [genres, setGenres] = useState<string[]>([]);
   const navigate = useNavigate();
 
-  const [createBook, { loading, error }] = useMutation(ADD_BOOK, {
+  const [createBook, { loading }] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: GET_ALL_AUTHORS }],
     onError: (error) => {
       const messages = error.graphQLErrors.map(e => e.message).join('\n');
-      console.log((messages));
+      notifyWith((messages));
     },
     onCompleted: () => {
       navigate('/books');
@@ -57,9 +58,7 @@ const NewBook = () => {
   const loggInuser = useQuery(GET_LOGGEDIN_USER);
   const user = loggInuser.data?.getLoggedInUser;
 
-  if (loading) return 'Submitting...';
-  if (error) return `Submission error! ${error.message}`;
-  if (!user) return null;
+  if (loading || !user) return null;
 
   return (
     <div>

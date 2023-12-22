@@ -1,19 +1,28 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Author } from '../../app/type';
+import { Author, NotifyProp } from '../../app/type';
 import { EDIT_BORN_YEAR } from '../../queries';
 
-const AuthorBirthForm = ({ authors }: { authors: Author[] }) => {
+type PropsType = {
+  authors: Author[]
+  notifyWith: NotifyProp
+};
+
+const AuthorBirthForm = ({ notifyWith, authors }: PropsType) => {
   const [name, setName] = useState<string>('');
   const [born, setBorn] = useState<number>(2000);
 
-  const [editBirthYear, { loading, error }] = useMutation(EDIT_BORN_YEAR, {
+  const [editBirthYear, { loading }] = useMutation(EDIT_BORN_YEAR, {
     onError: (error) => {
-      console.log(error.graphQLErrors.map(e => e.message).join('\n'));
+      notifyWith(error.graphQLErrors.map(e => e.message).join('\n'));
     },
     onCompleted: ({ editAuthor }) => {
-      if (!editAuthor) console.log('Author not found');
+      if (editAuthor) {
+        notifyWith(`The author ${editAuthor.name}'s birth year has been updated successfully`);
+      } else {
+        notifyWith('Author not found');
+      }
     }
   });
 
@@ -22,8 +31,7 @@ const AuthorBirthForm = ({ authors }: { authors: Author[] }) => {
     born && editBirthYear({ variables: { name, born } });
   };
 
-  if (loading) return 'Submitting...';
-  if (error) return `Submission error! ${error.message}`;
+  if (loading) return null;
 
   return (
     <>
