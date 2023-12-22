@@ -82,3 +82,13 @@ export const GET_USER = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const GET_LOGGEDIN_USER = gql(/* GraphQL */ `
+  query GetLoggedInUser {
+    getLoggedInUser @client {
+      username
+      token
+      name
+    }
+  }
+`);

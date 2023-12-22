@@ -19,6 +19,7 @@ const documents = {
     "\n  mutation LoginUser($username: String!, $password: String!) {\n    login(\n      username: $username\n      password: $password\n    ) {\n      username\n      token\n      name\n    }\n  }\n": types.LoginUserDocument,
     "\n  mutation AddBook($title: String!, $published: Int!, $author: String!, $genres: [String!]!) {\n    addBook(\n      title: $title,\n      published: $published,\n      author: $author,\n      genres: $genres\n    ) {\n      title\n      published\n      author {\n        name\n        born\n      }\n      id\n      genres\n    }\n  }\n": types.AddBookDocument,
     "\n  query GetUser {\n    me {\n      username\n      favoriteGenre\n      id\n    }\n  }\n": types.GetUserDocument,
+    "\n  query GetLoggedInUser {\n    getLoggedInUser @client {\n      username\n      token\n      name\n    }\n  }\n": types.GetLoggedInUserDocument,
 };
 
 /**
@@ -59,6 +60,10 @@ export function gql(source: "\n  mutation AddBook($title: String!, $published: I
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetUser {\n    me {\n      username\n      favoriteGenre\n      id\n    }\n  }\n"): (typeof documents)["\n  query GetUser {\n    me {\n      username\n      favoriteGenre\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetLoggedInUser {\n    getLoggedInUser @client {\n      username\n      token\n      name\n    }\n  }\n"): (typeof documents)["\n  query GetLoggedInUser {\n    getLoggedInUser @client {\n      username\n      token\n      name\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
