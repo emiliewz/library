@@ -1,7 +1,6 @@
 import User from './models/user';
 import jwt from 'jsonwebtoken';
 import config from './utils/config';
-import { GraphQLError } from 'graphql';
 import { IncomingMessage } from 'http';
 
 const getTokenFromRequest = (req: IncomingMessage): string | null => {
@@ -26,12 +25,8 @@ export const getUserFromRequest = async (req: IncomingMessage) => {
     }
     return null;
   } catch (error) {
-    throw new GraphQLError('invalid token', {
-      extensions: {
-        code: 'BAD_USER_INPUT',
-        error
-      }
-    });
+    console.log(error);
+    return;
   }
 };
 
