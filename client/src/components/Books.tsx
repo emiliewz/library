@@ -6,10 +6,12 @@ import { GET_ALL_BOOKS } from '../queries';
 const Books = () => {
   const genre = useField('text');
 
-  const result = useQuery(GET_ALL_BOOKS);
+  const result = useQuery(GET_ALL_BOOKS, {
+    variables: { genre: null },
+  });
   const result_g = useQuery(GET_ALL_BOOKS, {
     variables: { genre: genre.field.value },
-    skip: !genre
+    skip: genre.field.value === ''
   });
 
   if (result.loading || result_g.loading) return <p>Loading...</p>;
@@ -18,7 +20,7 @@ const Books = () => {
   const allBooks = result.data?.allBooks;
 
   const genres_total = allBooks?.reduce((a: string[], b) => a.concat(b.genres), []);
-  const books = !genre ? allBooks : result_g.data?.allBooks;
+  const books = genre.field.value === '' ? allBooks : result_g.data?.allBooks;
 
   return (
     <div>

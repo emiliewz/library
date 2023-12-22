@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useField } from '../utils';
 import { Button, Form, InputGroup } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
-import { ADD_BOOK, GET_ALL_AUTHORS, GET_ALL_BOOKS } from '../queries';
+import { useMutation, useQuery } from '@apollo/client';
+import { ADD_BOOK, GET_ALL_AUTHORS, GET_ALL_BOOKS, GET_LOGGEDIN_USER } from '../queries';
 import { useNavigate } from 'react-router-dom';
 
 const NewBook = () => {
@@ -16,22 +16,22 @@ const NewBook = () => {
   const [createBook, { loading, error }] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: GET_ALL_AUTHORS }],
     onError: (error) => {
-      let messages = error.graphQLErrors.map(e => e.message).join('\n');
-      console.log((error));
-
-      if (error.graphQLErrors[0]?.extensions) {
-        messages += error.graphQLErrors[0].extensions?.error?.message;
-      }
-      console.log(messages);
+      const messages = error.graphQLErrors.map(e => e.message).join('\n');
+      console.log((messages));
     },
     onCompleted: () => {
       navigate('/books');
     },
-    update: (cache, response) => {
-      cache.updateQuery({ query: GET_ALL_BOOKS }, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(response.data?.addBook),
-        };
+    update: (cache, { data }) => {
+      cache.updateQuery({ query: GET_ALL_BOOKS, variables: { genre: null } }, (cachedBooks) => {
+        if (cachedBooks) {
+          let allBooks = cachedBooks?.allBooks;
+          const newBook = data?.addBook;
+          if (newBook) {
+            allBooks = allBooks?.concat(newBook);
+          }
+          return { allBooks };
+        }
       });
     },
   });
@@ -42,7 +42,7 @@ const NewBook = () => {
       variables: {
         title: title.field.value,
         author: author.field.value,
-        published: Number(published.field.value),
+        published: published.field.value ? Number(published.field.value) : new Date().getFullYear(),
         genres
       }
     });
@@ -54,8 +54,12 @@ const NewBook = () => {
     setGenres([]);
   };
 
+  const loggInuser = useQuery(GET_LOGGEDIN_USER);
+  const user = loggInuser.data?.getLoggedInUser;
+
   if (loading) return 'Submitting...';
   if (error) return `Submission error! ${error.message}`;
+  if (!user) return null;
 
   return (
     <div>
