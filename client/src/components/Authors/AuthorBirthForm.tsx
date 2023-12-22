@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Author } from '../../app/type';
 import { EDIT_BORN_YEAR } from '../../queries';
@@ -8,13 +8,14 @@ const AuthorBirthForm = ({ authors }: { authors: Author[] }) => {
   const [name, setName] = useState<string>('');
   const [born, setBorn] = useState<number>(2000);
 
-  const [editBirthYear, { data, loading, error }] = useMutation(EDIT_BORN_YEAR);
-
-  useEffect(() => {
-    if (data && data.editAuthor === null) {
-      console.log('Author not found');
+  const [editBirthYear, { loading, error }] = useMutation(EDIT_BORN_YEAR, {
+    onError: (error) => {
+      console.log(error.graphQLErrors.map(e => e.message).join('\n'));
+    },
+    onCompleted: ({ editAuthor }) => {
+      if (!editAuthor) console.log('Author not found');
     }
-  }, [data]);
+  });
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -22,10 +23,7 @@ const AuthorBirthForm = ({ authors }: { authors: Author[] }) => {
   };
 
   if (loading) return 'Submitting...';
-  if (error) {
-    console.log(error.graphQLErrors.map(e => e.message).join('\n'));
-    return `Submission error! ${error.message}`;
-  }
+  if (error) return `Submission error! ${error.message}`;
 
   return (
     <>
