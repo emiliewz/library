@@ -5,6 +5,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { setContext } from '@apollo/client/link/context';
 import storageService from '../services/storage';
 import { useState } from 'react';
+import { onError } from '@apollo/client/link/error';
 
 const authLink = setContext((_, { headers }) => {
   const token = storageService.getToken();
@@ -16,6 +17,16 @@ const authLink = setContext((_, { headers }) => {
       authorization
     }
   };
+});
+
+export const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) => {
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      );
+    });
+  if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
 export const getSplitLink = () => {

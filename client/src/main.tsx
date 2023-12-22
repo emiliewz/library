@@ -1,11 +1,11 @@
 import ReactDOM from 'react-dom/client';
 import App from './app/App';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { getSplitLink } from './utils/index';
+import { ApolloClient, InMemoryCache, ApolloProvider, from } from '@apollo/client';
+import { errorLink, getSplitLink } from './utils/index';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const client = new ApolloClient({
-  link: getSplitLink(),
+  link: from([errorLink, getSplitLink()]),
   cache: new InMemoryCache()
 });
 
