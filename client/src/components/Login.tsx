@@ -1,29 +1,33 @@
 import { useMutation } from '@apollo/client';
 import { useField } from '../utils';
 import { Button, Form } from 'react-bootstrap';
-import { LOGIN_USER } from '../queries';
-import { useEffect } from 'react';
-import storageService from '../services/storage';
+import { GET_LOGGEDIN_USER, LOGIN_USER } from '../queries';
 import { useNavigate } from 'react-router-dom';
+import storageService from '../services/storage';
 
 const Login = () => {
   const username = useField('text');
   const password = useField('password');
   const navigate = useNavigate();
 
-  const [login, { data, loading, error }] = useMutation(LOGIN_USER);
-
-  useEffect(() => {
-    if (data && data.login) {
-      storageService.saveUser(data.login);
-      navigate('/');
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  const [loginUser, { loading, error }] = useMutation(LOGIN_USER, {
+    onCompleted: ({ login }) => {
+      if (login) {
+        storageService.saveUser(login);
+        navigate('/');
+      }
+    },
+    update: (cache, { data }) => {
+      cache.updateQuery(
+        { query: GET_LOGGEDIN_USER },
+        () => ({ getLoggedInUser: data?.login })
+      );
+    },
+  });
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    login({
+    loginUser({
       variables: {
         username: username.field.value,
         password: password.field.value
@@ -31,8 +35,8 @@ const Login = () => {
     });
   };
 
-  if (loading) return 'Submitting...';
-  if (error) return `Submission error! ${error.message}`;
+  if (loading) return null;
+  if (error) return `Error! ${error}`;
 
   return (
     <div>
