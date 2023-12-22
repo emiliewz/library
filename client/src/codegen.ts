@@ -6,6 +6,7 @@ const config: CodegenConfig = {
   generates: {
     './src/__generated__/': {
       preset: 'client',
+      schema: './src/schema.graphql',
       plugins: [],
       presetConfig: {
         gqlTagName: 'gql',
