@@ -10,3 +10,8 @@ export interface User {
   token: string
   username: string
 }
+
+export interface Info {
+  message: string
+  type: string
+}
