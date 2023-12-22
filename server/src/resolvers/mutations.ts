@@ -2,20 +2,13 @@ import { GraphQLError } from 'graphql';
 import { MutationResolvers } from '../__generated__/resolvers-types';
 import Author from '../models/author';
 import Book from '../models/book';
-import { HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { IBook, IUser } from '../types';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../utils/config';
 import { pubsub } from './subscriptions';
-
-declare module 'jsonwebtoken' {
-  export interface UserForTokenPayload extends JwtPayload {
-    username: string,
-    id: Types.ObjectId,
-  }
-}
 
 const mutations: MutationResolvers = {
   addBook: async (_root, { title, published, author, genres }, contextValue) => {

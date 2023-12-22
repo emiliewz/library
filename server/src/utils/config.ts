@@ -1,5 +1,13 @@
 import dotenv from 'dotenv';
+import { Types } from 'mongoose';
 dotenv.config();
+
+declare module 'jsonwebtoken' {
+  export interface UserForTokenPayload extends JwtPayload {
+    username: string,
+    id: Types.ObjectId,
+  }
+}
 
 declare let process: {
   env: {
