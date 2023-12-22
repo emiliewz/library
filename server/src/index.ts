@@ -14,6 +14,7 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import express from 'express';
+import path from 'path';
 
 const typeDefs = readFileSync('./src/schema.graphql', { encoding: 'utf-8' });
 
@@ -56,14 +57,17 @@ const main = async () => {
   });
 
   await server.start();
-
   app.use(
-    '/',
     cors(),
-    express.static(__dirname + '/dist'),
     express.json(),
-    expressMiddleware(server, { context })
+    express.static(__dirname + '/../dist')
   );
+
+  app.get('/*', function (_req, res) {
+    res.sendFile(path.join(__dirname + '/../dist/index.html'));
+  });
+
+  app.use(expressMiddleware(server, { context }));
 
   httpServer.listen(config.PORT, () =>
     console.log(`Server is now running on http://localhost:${config.PORT}`)

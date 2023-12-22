@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "generate": "graphql-codegen --config src/codegen.ts",
-    "compile": "npm run generate && tsc",
-    "start": "npm run compile && NODE_ENV=PRODUCTION node build/index.js",
+    "compile": "npm run generate",
+    "tsc": "tsc",
+    "start": "npm run tsc && NODE_ENV=PRODUCTION node build/index.js",
     "dev": "NODE_ENV=DEVELOPMENT ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts .",
     "build:ui": "rm -rf dist && cd ../client && npm i && npm run build && cp -r dist ../server",
