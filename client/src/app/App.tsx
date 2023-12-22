@@ -5,7 +5,7 @@ import Books from '../components/Books';
 import NewBook from '../components/NewBook';
 import storageService from '../services/storage';
 import { useApolloClient, useQuery } from '@apollo/client';
-import { Button } from 'react-bootstrap';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { GET_LOGGEDIN_USER } from '../queries';
 import { Info } from './type';
 import Notification from '../components/Notification';
@@ -41,23 +41,38 @@ const App = () => {
 
   return (
     <div className='container'>
-      <h2>Library App</h2>
-      <Link className='p-2 ps-0 text-decoration-none' to='/'>Authors</Link>
-      <Link className='p-2 ps-0 text-decoration-none' to='/books'>Books</Link>
-      {user && <>
-        <Link className='p-2 ps-0 text-decoration-none' to='/create'>Add</Link>
-        <Link className='p-2 ps-0 text-decoration-none' to='/recommend'>Recommend</Link>
-        <Button onClick={logOut}>Log out</Button>
-      </>}
-      {!user && <>
-        <Link className='p-2 ps-0 text-decoration-none' to='/login'>Login</Link>
-      </>}
+      <>
+        <Navbar bg='light' expand='lg' data-bs-theme='light' className='bg-body-tertiary'>
+          <Container>
+            <Navbar.Brand as={Link} to='/'>Library App</Navbar.Brand>
+            <Navbar.Collapse>
+              <Nav className='me-auto'>
+                <Nav.Link as={Link} to='/'>Books</Nav.Link>
+                <Nav.Link as={Link} to='/authors'>Authors</Nav.Link>
+                {user && <><Nav.Link as={Link} to='/create'>Add</Nav.Link>
+                  <Nav.Link as={Link} to='/recommend'>Recommend</Nav.Link></>}
+                {!user && <Nav.Link as={Link} to='/login'>Login</Nav.Link>}
+              </Nav>
+            </Navbar.Collapse>
+
+            {user && (<>
+              <Navbar.Collapse className='justify-content-end'>
+                <Navbar.Text>
+                  Signed in as: {user?.name}
+                </Navbar.Text>
+                <Button className='ms-2' variant='outline-success' onClick={logOut}>LogOut</Button>
+              </Navbar.Collapse>
+              <Navbar.Toggle />
+            </>)}
+          </Container>
+        </Navbar>
+      </>
 
       <Notification info={info} />
 
       <Routes>
-        <Route path='/' element={<Authors notifyWith={notifyWith} />} />
-        <Route path='/books' element={<Books notifyWith={notifyWith} />} />
+        <Route path='/authors' element={<Authors notifyWith={notifyWith} />} />
+        <Route path='/' element={<Books notifyWith={notifyWith} />} />
         <Route path='/create' element={<NewBook notifyWith={notifyWith} />} />
         <Route path='/login' element={<Login notifyWith={notifyWith} />} />
         <Route path='/recommend' element={<Recommend notifyWith={notifyWith} />} />
