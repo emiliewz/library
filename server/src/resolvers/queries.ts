@@ -21,7 +21,7 @@ const queries: QueryResolvers = {
     }
     return Book.find(query).populate('author');
   },
-  allAuthors: async () => Author.find({}),
+  allAuthors: async () => Author.find({}).populate('books'),
   me: (_root, _args, contextValue) => contextValue.user
 };
 
