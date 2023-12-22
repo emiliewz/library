@@ -6,12 +6,11 @@ const saveUser = (u: User): void => {
   localStorage.setItem(KEY, JSON.stringify(u));
 };
 
-const getUser = (): User | null => {
+const getUser = (): User | undefined => {
   const user = localStorage.getItem(KEY);
   if (user) {
     return JSON.parse(user);
   }
-  return null;
 };
 
 const getToken = (): string | undefined => {
