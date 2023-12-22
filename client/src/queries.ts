@@ -72,3 +72,13 @@ export const ADD_BOOK = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const GET_USER = gql(/* GraphQL */ `
+  query GetUser {
+    me {
+      username
+      favoriteGenre
+      id
+    }
+  }
+`);
