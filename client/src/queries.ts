@@ -78,6 +78,7 @@ export const GET_USER = gql(/* GraphQL */ `
     me {
       username
       favoriteGenre
+      name
       id
     }
   }
@@ -89,6 +90,22 @@ export const GET_LOGGEDIN_USER = gql(/* GraphQL */ `
       username
       token
       name
+    }
+  }
+`);
+
+export const REGISTER_USER = gql(/* GraphQL */ `
+  mutation RegisterUser($username: String!, $password: String!, $name: String!, $favoriteGenre: String!) {
+    createUser(
+      username: $username
+      password: $password
+      name: $name
+      favoriteGenre: $favoriteGenre
+    ) {
+      username
+      name
+      favoriteGenre
+      id
     }
   }
 `);
