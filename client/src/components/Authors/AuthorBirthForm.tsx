@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Author, NotifyProp } from '../../app/type';
 import { EDIT_BORN_YEAR } from '../../queries';
-import { getErrorMsg } from '../../app/utils';
+import { getErrorMsg, useField } from '../../app/utils';
 
 type PropsType = {
   authors: Author[]
@@ -12,7 +12,7 @@ type PropsType = {
 
 const AuthorBirthForm = ({ notifyWith, authors }: PropsType) => {
   const [name, setName] = useState<string>('');
-  const [born, setBorn] = useState<number>(2000);
+  const bornYear = useField('number');
 
   const [editBirthYear, { loading }] = useMutation(EDIT_BORN_YEAR, {
     onError: (error) => notifyWith(getErrorMsg(error)),
@@ -27,7 +27,8 @@ const AuthorBirthForm = ({ notifyWith, authors }: PropsType) => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    born && editBirthYear({ variables: { name, born } });
+    editBirthYear({ variables: { name, born: Number(bornYear.field.value) } });
+    bornYear.setValue('');
   };
 
   if (loading) return null;
@@ -49,7 +50,7 @@ const AuthorBirthForm = ({ notifyWith, authors }: PropsType) => {
 
         <Form.Group>
           <Form.Label>born:</Form.Label>
-          <Form.Control value={born} type='number' onChange={({ target }) => setBorn(Number(target.value))} />
+          <Form.Control {...bornYear.field} />
         </Form.Group>
 
         <Button variant='outline-primary' type='submit'>update author</Button>
