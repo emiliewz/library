@@ -18,7 +18,8 @@ const NewBook = ({ notifyWith }: { notifyWith: NotifyProp }) => {
     refetchQueries: [{ query: GET_ALL_AUTHORS }],
     onError: (error) => notifyWith(getErrorMsg(error)),
     onCompleted: () => {
-      navigate('/books');
+      notifyWith(`Book ${title.field.value} by ${author.field.value} added successfully.`);
+      navigate('/');
     },
     update: (cache, { data }) => {
       cache.updateQuery({ query: GET_ALL_BOOKS, variables: { genre: null } }, (cachedBooks) => {
@@ -44,12 +45,6 @@ const NewBook = ({ notifyWith }: { notifyWith: NotifyProp }) => {
         genres
       }
     });
-
-    title.setValue('');
-    author.setValue('');
-    published.setValue('');
-    genre.setValue('');
-    setGenres([]);
   };
 
   const loggInuser = useQuery(GET_LOGGEDIN_USER);
