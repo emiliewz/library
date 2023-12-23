@@ -16,7 +16,7 @@ const mutations: MutationResolvers = {
     let authorInDb = await Author.findOne({ name: author });
 
     if (!contextValue.user) {
-      throw new GraphQLError('not authenticated', {
+      throw new GraphQLError('Not authenticated, please sign in', {
         extensions: {
           code: 'BAD_USER_INPUT',
         }
@@ -31,7 +31,12 @@ const mutations: MutationResolvers = {
       authorInDb.bookCount = authorInDb.books.length;
       await authorInDb.save();
     } catch (error) {
-      throw new GraphQLError('Saving author failed', {
+      let message = 'Saving author failed ';
+      if (error instanceof Error) {
+        console.log(error.message);
+        message += error.message;
+      }
+      throw new GraphQLError(message, {
         extensions: {
           code: 'BAD_USER_INPUT',
           invalidArgs: { author },
@@ -47,7 +52,12 @@ const mutations: MutationResolvers = {
       await pubsub.publish('BOOK_ADDED', { bookAdded: book.populate('author') });
       return book.populate('author');
     } catch (error) {
-      throw new GraphQLError('Saving book failed', {
+      let message = 'Saving book failed ';
+      if (error instanceof Error) {
+        console.log(error.message);
+        message += error.message;
+      }
+      throw new GraphQLError(message, {
         extensions: {
           code: 'BAD_USER_INPUT',
           invalidArgs: { title, published, genres },
@@ -61,7 +71,7 @@ const mutations: MutationResolvers = {
     const author = await Author.findOne({ name });
 
     if (!contextValue.user) {
-      throw new GraphQLError('not authenticated', {
+      throw new GraphQLError('Not authenticated, please sign in', {
         extensions: {
           code: 'BAD_USER_INPUT',
         }
@@ -70,10 +80,19 @@ const mutations: MutationResolvers = {
 
     if (author) {
       try {
-        author.born = setBornTo;
-        return (await author.save()).populate('books');
+        if (setBornTo !== 0) {
+          author.born = setBornTo;
+          return (await author.save()).populate('books');
+        } else {
+          throw new Error(': author\'s born year can not be null');
+        }
       } catch (error) {
-        throw new GraphQLError('Editing bornyear failed', {
+        let message = 'Editing author failed';
+        if (error instanceof Error) {
+          console.log(error.message);
+          message += error.message;
+        }
+        throw new GraphQLError(message, {
           extensions: {
             code: 'BAD_USER_INPUT',
             invalidArgs: setBornTo,
@@ -108,7 +127,12 @@ const mutations: MutationResolvers = {
       await user.save();
       return User.findById(user.id);
     } catch (error) {
-      throw new GraphQLError('Creating the user failed', {
+      let message = 'Creating the user failed ';
+      if (error instanceof Error) {
+        console.log(error.message);
+        message += error.message;
+      }
+      throw new GraphQLError(message, {
         extensions: {
           code: 'BAD_USER_INPUT',
           invalidArgs: error,
