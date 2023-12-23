@@ -11,6 +11,7 @@ import { Info } from './type';
 import Notification from '../components/Notification';
 import { useState } from 'react';
 import Recommend from '../components/Recommend';
+import RegisterForm from '../components/RegisterForm';
 
 const App = () => {
   const [info, setInfo] = useState<Info>({} as Info);
@@ -51,7 +52,10 @@ const App = () => {
                 <Nav.Link as={Link} to='/authors'>Authors</Nav.Link>
                 {user && <><Nav.Link as={Link} to='/create'>Add</Nav.Link>
                   <Nav.Link as={Link} to='/recommend'>Recommend</Nav.Link></>}
-                {!user && <Nav.Link as={Link} to='/login'>Login</Nav.Link>}
+                {!user && <>
+                  <Nav.Link as={Link} to='/login'>Login</Nav.Link>
+                  <Nav.Link as={Link} to='/register'>Register</Nav.Link>
+                </>}
               </Nav>
             </Navbar.Collapse>
 
@@ -74,8 +78,9 @@ const App = () => {
         <Route path='/authors' element={<Authors notifyWith={notifyWith} />} />
         <Route path='/' element={<Books notifyWith={notifyWith} />} />
         <Route path='/create' element={<NewBook notifyWith={notifyWith} />} />
-        <Route path='/login' element={<Login notifyWith={notifyWith} />} />
         <Route path='/recommend' element={<Recommend notifyWith={notifyWith} />} />
+        <Route path='/login' element={<Login notifyWith={notifyWith} />} />
+        <Route path='/register' element={<RegisterForm notifyWith={notifyWith} />} />
       </Routes>
     </div>
   );
