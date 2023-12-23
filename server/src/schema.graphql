@@ -25,6 +25,7 @@ type Token {
   token: String!
   username: String!
   name: String!
+  favoriteGenre: String!
 }
 
 type Query {

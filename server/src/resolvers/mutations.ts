@@ -163,7 +163,7 @@ const mutations: MutationResolvers = {
     };
 
     const token: string = jwt.sign(userForToken, config.SECRET, { expiresIn: 60 * 60 });
-    return { token, username: user.username, name: user.name };
+    return { token, username: user.username, name: user.name, favoriteGenre: user.favoriteGenre };
   }
 };
 

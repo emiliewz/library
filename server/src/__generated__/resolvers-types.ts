@@ -93,6 +93,7 @@ export type Subscription = {
 
 export type Token = {
   __typename?: 'Token';
+  favoriteGenre: Scalars['String']['output'];
   name: Scalars['String']['output'];
   token: Scalars['String']['output'];
   username: Scalars['String']['output'];
@@ -244,6 +245,7 @@ export type SubscriptionResolvers<ContextType = MyContext, ParentType extends Re
 }>;
 
 export type TokenResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
+  favoriteGenre?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

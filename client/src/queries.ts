@@ -49,6 +49,7 @@ export const LOGIN_USER = gql(/* GraphQL */ `
       username
       token
       name
+      favoriteGenre
     }
   }
 `);
@@ -90,6 +91,7 @@ export const GET_LOGGEDIN_USER = gql(/* GraphQL */ `
       username
       token
       name
+      favoriteGenre
     }
   }
 `);

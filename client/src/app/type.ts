@@ -9,6 +9,7 @@ export interface User {
   name: string
   token: string
   username: string
+  favoriteGenre: string
 }
 
 export interface Info {
