@@ -21,8 +21,8 @@ const authorSchema = new Schema<IAuthor>({
   bookCount: {
     type: Number,
     default: 0
-  }
-});
+  },
+}, { timestamps: true });
 
 authorSchema.plugin(uniqueValidator);
 

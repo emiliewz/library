@@ -21,7 +21,7 @@ const userSchema = new Schema<IUser>({
     required: true,
     minlength: 6
   }
-});
+}, { timestamps: true });
 
 userSchema.plugin(uniqueValidator);
 

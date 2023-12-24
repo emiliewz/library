@@ -1,17 +1,21 @@
-import { Types } from 'mongoose';
+import { Date, Types } from 'mongoose';
 
 export interface IAuthor {
   name: string
   born: number
   bookCount: number
-  books: Types.ObjectId[]
+  books: Types.ObjectId[],
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface IBook {
   title: string
   published: number
   author: Types.ObjectId
-  genres: string[]
+  genres: string[],
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface IUser {
@@ -19,4 +23,6 @@ export interface IUser {
   name: string
   favoriteGenre: string
   passwordHash: string
+  createdAt: Date
+  updatedAt: Date
 }

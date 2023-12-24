@@ -19,7 +19,7 @@ const bookSchema = new Schema<IBook>({
       type: String
     }
   ]
-});
+}, { timestamps: true });
 
 bookSchema.plugin(uniqueValidator);
 bookSchema.set('toJSON', {
